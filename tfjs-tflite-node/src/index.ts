@@ -22,6 +22,9 @@ import * as fs from 'fs';
 export * from './delegate_plugin';
 import {TFLiteDelegatePlugin} from './delegate_plugin';
 import fetch from 'node-fetch';
+import * as SegfaultHandler from 'segfault-handler';
+
+SegfaultHandler.registerHandler();
 
 // tslint:disable-next-line:no-require-imports
 const addon = require('bindings')('node_tflite_binding');

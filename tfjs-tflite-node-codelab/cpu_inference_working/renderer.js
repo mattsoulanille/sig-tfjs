@@ -19,6 +19,7 @@
 const {loadTFLiteModel} = require('tfjs-tflite-node');
 const tf = require('@tensorflow/tfjs');
 // CODELAB part 2: Import the delegate here.
+const {WebNNDelegate, WebNNDevice} = require('webnn-tflite-delegate');
 const fs = require('fs');
 const Stats = require('stats.js');
 
@@ -78,11 +79,43 @@ async function main() {
         .split(/\r?\n/);
 
   // CODELAB part 2: Load the delegate model here.
+  let webnnModel = await loadTFLiteModel(modelPath, {
+    delegates: [new WebNNDelegate({webnnDevice: WebNNDevice.DEFAULT})],
+  });
 
   // CODELAB part 1: Set up tf.data.webcam here.
   const tensorCam = await tf.data.webcam(webcam);
 
   // CODELAB part 2: Create the delegate button here.
+  let useWebNNDelegate = false;
+  const divElem = document.createElement('div');
+  const toggleWebNNButton = document.createElement('button');
+  function toggleWebNN() {
+    useWebNNDelegate = !useWebNNDelegate;
+    toggleWebNNButton.innerHTML = useWebNNDelegate
+        ? 'Using WebNN. Press to switch to TFLite CPU.'
+        : 'Using TFLite CPU. Press to switch to WebNN.';
+    divElem.hidden = useWebNNDelegate ? false : true;
+  }
+
+  toggleWebNNButton.addEventListener('click', toggleWebNN);
+  toggleWebNN();
+  document.body.appendChild(toggleWebNNButton);
+  document.body.appendChild(divElem);
+
+  // Create elements for WebNN device selection
+  divElem.innerHTML = '<br/>WebNN Device: ';
+  const selectElem = document.createElement('select');
+  divElem.appendChild(selectElem);
+
+  const webnnDevices = ['Default', 'GPU', 'CPU'];
+  // append the options
+  for (let i = 0; i < webnnDevices.length; i++) {
+    var optionElem = document.createElement('option');
+    optionElem.value = i;
+    optionElem.text = webnnDevices[i];
+    selectElem.appendChild(optionElem);
+  }
 
   async function run() {
     // CODELAB part 1: Capture webcam frames here.

@@ -22,9 +22,9 @@ import * as fs from 'fs';
 export * from './delegate_plugin';
 import {TFLiteDelegatePlugin} from './delegate_plugin';
 import fetch from 'node-fetch';
-import * as SegfaultHandler from 'segfault-handler';
+//import * as SegfaultHandler from 'segfault-handler';
 
-SegfaultHandler.registerHandler();
+//SegfaultHandler.registerHandler();
 
 // tslint:disable-next-line:no-require-imports
 const addon = require('bindings')('node_tflite_binding');
@@ -65,7 +65,8 @@ async function createModel(model: string | ArrayBuffer,
   }
 
   const interpreterOptions: InterpreterOptions = {
-    threads: options?.numThreads ?? 4,
+    //threads: options?.numThreads ?? 4,
+    threads: 0,
   };
 
   const firstDelegate = options?.delegates?.[0];

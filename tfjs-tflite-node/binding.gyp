@@ -110,7 +110,7 @@
             '<(module_root_dir)/cc_deps/windows_amd64/external_delegate_obj.dll.if.lib',
           ],
           'copies': [{
-            'destination': './build/Release',
+            'destination': './build/Debug',
               'files': [
                 '<(module_root_dir)/cc_deps/windows_amd64/tensorflowlite_c.dll',
                 '<(module_root_dir)/cc_deps/windows_amd64/external_delegate_obj.dll',

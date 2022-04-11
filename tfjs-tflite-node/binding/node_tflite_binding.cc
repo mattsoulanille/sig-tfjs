@@ -355,7 +355,7 @@ class Interpreter : public Napi::ObjectWrap<Interpreter> {
       throw Napi::Error::New(env, "Failed to create tflite model. "
                              + get_and_clear_error_message());
     }
-
+    printf("Model: %p, options: %p", model, interpreterOptions);
     interpreter = TfLiteInterpreterCreate(model, interpreterOptions);
     if (!interpreter) {
       TfLiteModelDelete(model);

@@ -73,7 +73,7 @@ async function main() {
 
   // CODELAB part 1: Load the model here.
   const modelPath = './model/model_unquant.tflite';
-  const model = await loadTFLiteModel(modelPath);
+  const cpuModel = await loadTFLiteModel(modelPath);
   const labelsPath = './coral_model/labels.txt';
   const labels = fs.readFileSync('./model/labels.txt', 'utf8')
         .split(/\r?\n/);
@@ -117,6 +117,24 @@ async function main() {
     selectElem.appendChild(optionElem);
   }
 
+  selectElem.addEventListener('change', async () => {
+    let webnnDevice;
+    switch(selectElem.value) {
+      case '1':
+        webnnDevice = WebNNDevice.GPU;
+        break;
+      case '2':
+        webnnDevice = WebNNDevice.CPU;
+        break;
+      default:
+        webnnDevice = WebNNDevice.DEFAULT;
+        break;
+    }
+    webnnModel = await loadTFLiteModel(modelPath, {
+      delegates: [new WebNNDelegate({webnnDevice})],
+    });
+  });
+
   async function run() {
     // CODELAB part 1: Capture webcam frames here.
     const image = await tensorCam.capture();
@@ -127,6 +145,12 @@ async function main() {
       const normalized = tf.sub(divided, tf.scalar(1));
 
       // CODELAB part 2: Check whether to use the delegate here.
+      let model;
+      if (useWebNNDelegate) {
+        model = webnnModel;
+      } else {
+        model = cpuModel;
+      }
       // CODELAB part 1: Run the model and display the results here.
       stats.begin();
       let prediction = model.predict(normalized);

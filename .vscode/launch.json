@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [{
+       "type": "lldb",
+       "cwd": "coral-tflite-delegate",
+       "request": "launch",
+       "name": "Launch Program",
+       "program": "node",
+       "sourceMap": {
+            "C:\\Users\\matt\\sig-tfjs\\tfjs-tflite-node\\build\\Debug\\tensorflowlite_c.dll": "C:\\Users\\matt\\Projects\\tensorflow"
+            //"/tensorflow": "/c/Users/matt/Projects/tensorflow/tensorflow"
+       },
+       "args": [
+           "./node_modules/jasmine/bin/jasmine.js",
+       "--config=./jasmine-integration.json"
+       ]
+    }]
+  }
+  
